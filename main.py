@@ -32,6 +32,23 @@ def get_move(board, player_symbol):
                 return
         print("Invalid move, try again.")
 
+def check_win(board, player_symbol, required_to_win=3):
+    size = len(board)
+    for r in range(size):
+        for c in range(size):
+            if c + required_to_win <= size:  # Check row
+                if check_line([board[r][i] for i in range(c, c + required_to_win)], player_symbol):
+                    return True
+            if r + required_to_win <= size:  # Check column
+                if check_line([board[i][c] for i in range(r, r + required_to_win)], player_symbol):
+                    return True
+            if r + required_to_win <= size and c + required_to_win <= size:  # Check \ diagonal
+                if check_line([board[i][i+c-r] for i in range(r, r + required_to_win)], player_symbol):
+                    return True
+            if r + required_to_win <= size and c - required_to_win >= -1:  # Check / diagonal
+                if check_line([board[i][c-(i-r)] for i in range(r, r + required_to_win)], player_symbol):
+                    return True
+    return False
 
 def main():
     board_size = int(input("Enter the size of the board: "))
